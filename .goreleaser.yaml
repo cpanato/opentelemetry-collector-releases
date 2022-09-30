@@ -1,7 +1,6 @@
 project_name: opentelemetry-collector-releases
 env:
-  - COSIGN_EXPERIMENTAL=true
-
+- COSIGN_EXPERIMENTAL=true
 builds:
 - id: otelcol
   goos:
@@ -51,7 +50,6 @@ builds:
   - -trimpath
   env:
   - CGO_ENABLED=0
-
 archives:
 - id: otelcol
   builds:
@@ -63,7 +61,6 @@ archives:
   - otelcol-contrib
   name_template: '{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{
     .Arm }}{{ end }}{{ if .Mips }}_{{ .Mips }}{{ end }}'
-
 nfpms:
 - package_name: otelcol
   contents:
@@ -113,17 +110,15 @@ nfpms:
   maintainer: The OpenTelemetry Collector maintainers <cncf-opentelemetry-maintainers@lists.cncf.io>
   description: OpenTelemetry Collector - otelcol-contrib
   license: Apache 2.0
-
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
-
 dockers:
 - goos: linux
   goarch: "386"
   dockerfile: distributions/otelcol/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector:{{ .Version }}-386
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - otel/opentelemetry-collector:{{ .Version }}-386
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-386
   extra_files:
   - configs/otelcol.yaml
@@ -140,8 +135,8 @@ dockers:
   goarch: amd64
   dockerfile: distributions/otelcol/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector:{{ .Version }}-amd64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - otel/opentelemetry-collector:{{ .Version }}-amd64
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-amd64
   extra_files:
   - configs/otelcol.yaml
@@ -158,8 +153,8 @@ dockers:
   goarch: arm64
   dockerfile: distributions/otelcol/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector:{{ .Version }}-arm64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - otel/opentelemetry-collector:{{ .Version }}-arm64
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-arm64
   extra_files:
   - configs/otelcol.yaml
@@ -176,8 +171,8 @@ dockers:
   goarch: ppc64le
   dockerfile: distributions/otelcol/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector:{{ .Version }}-ppc64le
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - otel/opentelemetry-collector:{{ .Version }}-ppc64le
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-ppc64le
   extra_files:
   - configs/otelcol.yaml
@@ -194,8 +189,8 @@ dockers:
   goarch: "386"
   dockerfile: distributions/otelcol-contrib/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-386
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-386
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-386
   extra_files:
   - configs/otelcol-contrib.yaml
@@ -212,8 +207,8 @@ dockers:
   goarch: amd64
   dockerfile: distributions/otelcol-contrib/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-amd64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-amd64
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-amd64
   extra_files:
   - configs/otelcol-contrib.yaml
@@ -230,8 +225,8 @@ dockers:
   goarch: arm64
   dockerfile: distributions/otelcol-contrib/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-arm64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-arm64
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-arm64
   extra_files:
   - configs/otelcol-contrib.yaml
@@ -248,8 +243,8 @@ dockers:
   goarch: ppc64le
   dockerfile: distributions/otelcol-contrib/Dockerfile
   image_templates:
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-ppc64le
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-ppc64le
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-ppc64le
   extra_files:
   - configs/otelcol-contrib.yaml
@@ -262,56 +257,60 @@ dockers:
   - --label=org.opencontainers.image.version={{.Version}}
   - --label=org.opencontainers.image.source={{.GitURL}}
   use: buildx
-
 docker_manifests:
-- name_template: ctadeu/opentelemetry-collector:{{ .Version }}
+- name_template: otel/opentelemetry-collector:{{ .Version }}
   image_templates:
-  - ctadeu/opentelemetry-collector:{{ .Version }}-386
-  - ctadeu/opentelemetry-collector:{{ .Version }}-amd64
-  - ctadeu/opentelemetry-collector:{{ .Version }}-arm64
-  - ctadeu/opentelemetry-collector:{{ .Version }}-ppc64le
-- name_template: ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - otel/opentelemetry-collector:{{ .Version }}-386
+  - otel/opentelemetry-collector:{{ .Version }}-amd64
+  - otel/opentelemetry-collector:{{ .Version }}-arm64
+  - otel/opentelemetry-collector:{{ .Version }}-ppc64le
+- name_template: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}
   image_templates:
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-386
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-amd64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-arm64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector:{{
     .Version }}-ppc64le
-- name_template: ctadeu/opentelemetry-collector-contrib:{{ .Version }}
+- name_template: otel/opentelemetry-collector-contrib:{{ .Version }}
   image_templates:
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-386
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-amd64
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-arm64
-  - ctadeu/opentelemetry-collector-contrib:{{ .Version }}-ppc64le
-- name_template: ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-386
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-amd64
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-arm64
+  - otel/opentelemetry-collector-contrib:{{ .Version }}-ppc64le
+- name_template: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}
   image_templates:
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-386
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-amd64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-arm64
-  - ghcr.io/cpanato/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
+  - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-ppc64le
-
 signs:
-  - signature: "${artifact}.sig"
-    certificate: "${artifact}.pem"
-    cmd: cosign
-    args: ["sign-blob", "--output-signature", "${artifact}.sig", "--output-certificate", "${artifact}.pem", "${artifact}"]
-    artifacts: all
-
+- cmd: cosign
+  args:
+  - sign-blob
+  - --output-signature
+  - ${artifact}.sig
+  - --output-certificate
+  - ${artifact}.pem
+  - ${artifact}
+  signature: ${artifact}.sig
+  artifacts: all
+  certificate: ${artifact}.pem
 docker_signs:
-  - artifacts: all
-    args: [ "sign", "${artifact}" ]
-
+- args:
+  - sign
+  - ${artifact}
+  artifacts: all
 sboms:
-  - id: archive
-    artifacts: archive
-  - id: package
-    artifacts: package
+- id: archive
+  artifacts: archive
+- id: package
+  artifacts: package

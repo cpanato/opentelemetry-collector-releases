@@ -39,12 +39,15 @@ func Generate(imagePrefixes []string, dists []string) config.Project {
 		Checksum: config.Checksum{
 			NameTemplate: "{{ .ProjectName }}_checksums.txt",
 		},
-
+		Env:             []string{"COSIGN_EXPERIMENTAL=true"},
 		Builds:          Builds(dists),
 		Archives:        Archives(dists),
 		NFPMs:           Packages(dists),
 		Dockers:         DockerImages(imagePrefixes, dists),
 		DockerManifests: DockerManifests(imagePrefixes, dists),
+		Signs:           Sign(),
+		DockerSigns:     DockerSigns(),
+		SBOMs:           SBOM(),
 	}
 }
 
@@ -213,4 +216,48 @@ func DockerManifest(imagePrefixes []string, dist string) (manifests []config.Doc
 // imageName translates a distribution name to a container image name.
 func imageName(dist string) string {
 	return strings.Replace(dist, "otelcol", "opentelemetry-collector", 1)
+}
+
+func Sign() []config.Sign {
+	return []config.Sign{
+		{
+			Artifacts:   "all",
+			Signature:   "${artifact}.sig",
+			Certificate: "${artifact}.pem",
+			Cmd:         "cosign",
+			Args: []string{
+				"sign-blob",
+				"--output-signature",
+				"${artifact}.sig",
+				"--output-certificate",
+				"${artifact}.pem",
+				"${artifact}",
+			},
+		},
+	}
+}
+
+func DockerSigns() []config.Sign {
+	return []config.Sign{
+		{
+			Artifacts: "all",
+			Args: []string{
+				"sign",
+				"${artifact}",
+			},
+		},
+	}
+}
+
+func SBOM() []config.SBOM {
+	return []config.SBOM{
+		{
+			ID:        "archive",
+			Artifacts: "archive",
+		},
+		{
+			ID:        "package",
+			Artifacts: "package",
+		},
+	}
 }
