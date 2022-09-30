@@ -304,14 +304,11 @@ signs:
     certificate: "${artifact}.pem"
     cmd: cosign
     args: ["sign-blob", "--output-signature", "${artifact}.sig", "--output-certificate", "${artifact}.pem", "${artifact}"]
-    artifacts: binary
-  - id: checksum
-    signature: "${artifact}.sig"
-    certificate: "${artifact}.pem"
-    cmd: cosign
-    args: ["sign-blob", "--output-signature", "${artifact}.sig", "--output-certificate", "${artifact}.pem", "${artifact}"]
-    artifacts: checksum
+    artifacts: all
 
 docker_signs:
   - artifacts: all
     args: [ "sign", "${artifact}" ]
+
+sboms:
+- artifacts: any
