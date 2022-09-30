@@ -311,4 +311,7 @@ docker_signs:
     args: [ "sign", "${artifact}" ]
 
 sboms:
-- artifacts: any
+  - id: archive
+    artifacts: archive
+  - id: package
+    artifacts: package
