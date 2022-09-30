@@ -290,3 +290,19 @@ docker_manifests:
     .Version }}-arm64
   - ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:{{
     .Version }}-ppc64le
+
+signs:
+  - signature: "${artifact}.sig"
+    certificate: "${artifact}.pem"
+    cmd: cosign
+    args: ["sign-blob", "--output-signature", "${artifact}.sig", "--output-certificate", "${artifact}.pem", "${artifact}"]
+    artifacts: binary
+  - signature: "${artifact}.sig"
+    certificate: "${artifact}.pem"
+    cmd: cosign
+    args: ["sign-blob", "--output-signature", "${artifact}.sig", "--output-certificate", "${artifact}.pem", "${artifact}"]
+    artifacts: checksum
+
+docker_signs:
+  - artifacts: all
+    args: [ "sign", "${artifact}" ]
