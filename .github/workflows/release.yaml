@@ -26,7 +26,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: sigstore/cosign-installer@v2
+      - uses: sigstore/cosign-installer@v3
+
+      - uses: anchore/sbom-action/download-syft@v0.14.3
 
       - uses: docker/setup-qemu-action@v2
         with:
